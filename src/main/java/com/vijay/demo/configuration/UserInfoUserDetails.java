@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 
 public class UserInfoUserDetails implements UserDetails {
 
-    private String name;
+    private String username;
     private String password;
     private List<GrantedAuthority> authorities;
 
     // Constructor to initialize from UserInfo entity
     public UserInfoUserDetails(User user) {
-        this.name = user.getUsername();
+        this.username = user.getUsername();
         this.password = user.getPassword();
         // Convert roles string to a list of GrantedAuthorities
         this.authorities = Arrays.stream(user.getRoles().split(","))
@@ -38,7 +38,7 @@ public class UserInfoUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override

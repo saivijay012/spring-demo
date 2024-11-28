@@ -18,6 +18,11 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
+    // Optional: This is required if the SECRET is not provided to fetch custom generated key
+    /*@Autowired
+    private SecretKeyProvider secretKeyProvider;
+     */
+
     // Secret key for signing JWT
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
@@ -40,11 +45,11 @@ public class JwtService {
     // Parse all claims from the token using Jwts.parser()
     private Claims extractAllClaims(String token) {
         // Create JwtParser using JwtParserBuilder
-        JwtParser parser = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(getSignKey()) // Set the signing key
-                .build();                    // Build the JwtParser
-        // Parse and return claims
-        return parser.parseClaimsJws(token).getBody();
+                .build()                    // Build the JwtParser
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     // Check if the token has expired
@@ -70,13 +75,14 @@ public class JwtService {
                 .setClaims(claims) // Set custom claims
                 .setSubject(subject) // Set the username or user ID as the subject
                 .setIssuedAt(new Date(System.currentTimeMillis())) // Issue time
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // Token expiration (10 hours)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // Token expiration (1 hour)
                 .signWith(getSignKey(), SignatureAlgorithm.HS256) // Signing key and algorithm
                 .compact(); // Build and compact the token
     }
 
     // Retrieve the signing key from the secret
     private Key getSignKey() {
+//        byte[] keyBytes= Decoders.BASE64.decode(secretKeyProvider.getSecret()); // Optional: Key retrieved from Autowired SecretKeyProvider class
         byte[] keyBytes= Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }

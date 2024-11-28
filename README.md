@@ -12,3 +12,6 @@
 * A single user can have multiple roles. Users table is auto initialized with 3 usernames upon running this application.
   * Roles: admin, user
   * check UserDatabaseInitializer class for usernames and passwords for generating valid token from /login endpoint.
+* In case the SECRET is not provided, refer to SecretKeyProvider class and its implementation
+  * The key generated will be same throughout application's lifetime. So that the JWT tokens can be consistent.
+  * Permanent SECRET key is still better because the generated key will generate a new SECRET everytime the application is re-launched.

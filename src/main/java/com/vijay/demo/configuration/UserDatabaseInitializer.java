@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+// Initializes the Users table automatically with predefined data upon launching the application.
+
 @Configuration
 public class UserDatabaseInitializer implements CommandLineRunner {
 
