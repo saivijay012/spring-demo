@@ -17,12 +17,4 @@ public class Book {
     private long id;
     private String title;
     private String author;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }

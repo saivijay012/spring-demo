@@ -16,7 +16,7 @@ public class UserInfoUserDetails implements UserDetails {
     private String password;
     private List<GrantedAuthority> authorities;
 
-    // Constructor to initialize from UserInfo entity
+    // Constructor to initialize from User entity
     public UserInfoUserDetails(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();

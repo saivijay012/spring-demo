@@ -106,6 +106,28 @@ public class BookController {
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/delete/{author}")
+    @PreAuthorize("hasAuthority('admin')")
+    public ResponseEntity<Object> deleteByAuthor(@PathVariable String author) {
+        List<Book> books = bookRepo.findAll();
+        if (books.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        List<Long> matchedIds = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getAuthor().equals(author)){
+                matchedIds.add(book.getId());
+            }
+        }
+        if (matchedIds.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        for (Long id : matchedIds) {
+            bookRepo.deleteById(id);
+        }
+        return ResponseEntity.ok().body("Deleted all books from " + author);
+    }
+
     @GetMapping("/loginToken")
     public ResponseEntity<Object> generateToken(@RequestBody AuthRequest authRequest) {
         try {
