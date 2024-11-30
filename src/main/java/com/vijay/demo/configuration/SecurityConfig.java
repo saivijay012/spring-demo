@@ -1,5 +1,6 @@
 package com.vijay.demo.configuration;
 
+import com.vijay.demo.util.CustomAuthenticationEntryPoint;
 import com.vijay.demo.util.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,9 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
 
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserInfoUserDetailsService();  // Custom service to load user from DB
@@ -38,11 +42,14 @@ public class SecurityConfig {
                 .requestMatchers("/loginToken").permitAll()
                 .requestMatchers("/**").authenticated()
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Stateless session management
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)  // Add JWT filter
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
